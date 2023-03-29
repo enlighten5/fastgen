@@ -24,12 +24,12 @@ mkdir -p ${PREFIX}/lib
 cp target/release/*.a ${PREFIX}/lib
 
 
-pushd llvm_mode
-rm -rf build
-mkdir -p build
-pushd build
-CC=clang-6.0 CXX=clang++-6.0 cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_BUILD_TYPE=Release ..
-make -j
-make install
-popd
-popd
+# pushd llvm_mode
+# rm -rf build
+# mkdir -p build
+# pushd build
+# CC=clang-6.0 CXX=clang++-6.0 cmake -DCMAKE_INSTALL_PREFIX=${PREFIX} -DCMAKE_BUILD_TYPE=Release ..
+# make -j
+# make install
+# popd
+# popd

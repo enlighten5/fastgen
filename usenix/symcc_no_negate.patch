@@ -1,0 +1,15 @@
+diff --git a/qsym/pintool/solver.cpp b/qsym/pintool/solver.cpp
+index b1786ed..a728df3 100644
+--- a/qsym/pintool/solver.cpp
++++ b/qsym/pintool/solver.cpp
+@@ -182,8 +182,8 @@ void Solver::addJcc(ExprRef e, bool taken, ADDRINT pc) {
+   else
+     is_interesting = isInterestingJcc(e, taken, pc);
+ 
+-  if (is_interesting)
+-    negatePath(e, taken);
++  // if (is_interesting)
++  //   negatePath(e, taken);
+   addConstraint(e, taken, is_interesting);
+ }
+ 

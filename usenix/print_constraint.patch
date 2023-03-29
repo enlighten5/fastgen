@@ -1,0 +1,19 @@
+diff --git a/runtime/qsym_backend/Runtime.cpp b/runtime/qsym_backend/Runtime.cpp
+index 07bed6d..813cc5e 100644
+--- a/runtime/qsym_backend/Runtime.cpp
++++ b/runtime/qsym_backend/Runtime.cpp
+@@ -286,10 +286,10 @@ void _sym_push_path_constraint(SymExpr constraint, int taken,
+                                uintptr_t site_id) {
+   if (constraint == nullptr)
+     return;
+-  // fprintf(stderr, "constraint pc: 0x%lx\n", site_id);
+-  // fprintf(stderr, "path_constraint:  ");
+-  // constraint->print(std::cerr);
+-  // fprintf(stderr, "\n");
++  fprintf(stderr, "constraint pc: 0x%lx\n", site_id);
++  fprintf(stderr, "path_constraint:  ");
++  constraint->print(std::cerr);
++  fprintf(stderr, "\n");
+ 
+   g_solver->addJcc(allocatedExpressions.at(constraint), taken != 0, site_id);
+ }
