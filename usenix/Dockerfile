@@ -318,8 +318,7 @@ RUN cp /symelastic/build/x86_64-linux-user/symqemu-x86_64 /usr/bin/clb_symsan
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- --default-toolchain=1.61.0 -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 RUN apt-get -y install libc++-dev libc++abi-dev
-RUN git clone https://github.com/r-fuzz/fastgen.git /fastgen
-COPY build.sh /fastgen/build
+RUN git clone https://github.com/enlighten5/fastgen.git /fastgen
 RUN cd /fastgen && \
     unset CFLAGS && \
     unset CXXFLAGS && \
@@ -347,4 +346,4 @@ COPY run_symsan_mem.sh /src/build-programs-symsannosolve/
 RUN apt-get install -y time
 COPY symcc_nosolve.patch /src
 COPY symsan_cov.patch /src
-COPY fuzzer.sh /src/build-programs/
+COPY fuzzer.sh /src/build-programs-native/
