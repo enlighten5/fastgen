@@ -131,6 +131,24 @@ pub fn serialize<'a>(label: u32, ctx: &'a Context, table: &UnionTable,
                    return None;
                  }
                },
+               DFSAN_ITE => {
+                let cond = serialize(info.l1, ctx, table, cache, expr_cache, fmemcmp_data);
+                if let Some(node) = cond {
+                  // Only handle LNot
+                  if node.sort_kind() == z3::SortKind::Bool {
+                    let base = node.as_bool().unwrap().ite(&ast::BV::from_i64(ctx,0,64), 
+                           &ast::BV::from_i64(ctx,1,64));
+                    let ret = z3::ast::Dynamic::from(base);
+                    cache.insert(label, cache[&val_l1].clone());
+                    expr_cache.insert(label, ret.clone());
+                    return Some(ret);
+                  } else {
+                    return None;
+                  }
+                } else {
+                  return None;
+                }
+               },
 
                DFSAN_FMEMCMP => {
                  //invalid memory operation  
@@ -218,7 +236,7 @@ pub fn serialize<'a>(label: u32, ctx: &'a Context, table: &UnionTable,
                  }
                },
                DFSAN_NOT => {
-                 if info.l2 == 0 || info.size != 1 {
+                 if info.l2 == 0/* || info.size != 1*/ {
                    return None;
                  } else {
                    let rawnode = serialize(info.l2, ctx, table, cache, expr_cache, fmemcmp_data);
@@ -230,7 +248,10 @@ pub fn serialize<'a>(label: u32, ctx: &'a Context, table: &UnionTable,
                        expr_cache.insert(label, ret.clone());
                        return Some(ret);
                      } else {
-                       return None;
+                       let ret = z3::ast::Dynamic::from(node.as_bv().unwrap().bvnot());
+                        cache.insert(label, cache[&val_l2].clone());
+                        expr_cache.insert(label, ret.clone());
+                       //return None;
                      }
                    } else {
                      return None;
@@ -762,7 +783,7 @@ pub fn solve(shmid: i32, pipefd: RawFd, solution_queue: BlockingQueue<Solution>,
       }
       branch_local.insert((msg.addr,msg.ctx),localcnt);
 
-      debug!("tid: {} label: {} result: {} addr: {} ctx: {} localcnt: {} type: {}",
+      debug!("tid: {} label: {} result: {} addr: {:x} ctx: {} localcnt: {} type: {}",
           msg.tid, msg.label, msg.result, msg.addr, msg.ctx, localcnt, msg.msgtype);
 
       if branch_hitcount.read().unwrap().contains_key(&(msg.addr,msg.ctx,localcnt,msg.result)) {

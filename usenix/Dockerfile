@@ -317,7 +317,7 @@ RUN cp /symelastic/build/x86_64-linux-user/symqemu-x86_64 /usr/bin/clb_symsan
 # build kirenenko
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | bash -s -- --default-toolchain=1.61.0 -y
 ENV PATH="/root/.cargo/bin:${PATH}"
-RUN apt-get -y install libc++-dev libc++abi-dev
+# RUN apt-get -y install libc++-dev libc++abi-dev
 RUN git clone https://github.com/enlighten5/fastgen.git /fastgen
 RUN cd /fastgen && \
     unset CFLAGS && \
